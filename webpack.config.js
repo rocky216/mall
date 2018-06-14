@@ -1,7 +1,7 @@
 var path = require("path")
 var webpack = require("webpack")
 var config = require("./config/index")
-
+var vuxLoader = require('vux-loader')
 
 module.exports = {
   devtool: 'source-map',
