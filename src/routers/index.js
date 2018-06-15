@@ -6,6 +6,7 @@ export default [
   {
     path: '/',
     component: App,
+    redirect: "/home",
     children: [
       {
         path: '/home',
