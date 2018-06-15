@@ -14,28 +14,56 @@
       </SwipeItem>
     </Swipe>
   </div>
+  <div class="nav" style="width: 100%; height: 10rem;">
+    <vueWaterfallEasy :imgsArr="imgsArr" @scrollReachBottom="getData">
+      <div class="img-info" slot-scope="props">
+        <p class="some-info">picture index: {{props.index}}</p>
+        <p class="some-info">{{props.value.info}}</p>
+      </div>
+    </vueWaterfallEasy>
+  </div>
 </div>
 </template>
 
 <script>
 import {Swipe, SwipeItem} from "mint-ui"
+import vueWaterfallEasy from 'vue-waterfall-easy'
+import {fetch} from "utils"
+import data from "./data"
 
 export default {
   components: {
     Swipe,
-    SwipeItem
+    SwipeItem,
+    vueWaterfallEasy
   },
   data(){
     return {
-
+      imgsArr: data
     }
+  },
+  created(){
+    console.log(data)
+  },
+  methods:{
+    getData(){}
   }
 }
 </script>
 
 <style lang="less" scoped>
+@import "../../asset/less/common.less";
+
 .banner {
   width:100%;
-  height: 100px;
+  height: 5rem;
+  .banner_item {
+    width: 100%;
+    height:100%;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 </style>

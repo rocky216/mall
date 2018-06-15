@@ -3,15 +3,14 @@ var express = require("express")
 var webpack = require("webpack")
 var WebpackDevMiddle = require("webpack-dev-middleware")
 var WebpackHotMiddle = require("webpack-hot-middleware")
+var  proxy = require('http-proxy-middleware');
 var webpackConfig = require("../webpack.config")
 var config = require("../config/index")
 var app = express()
 var compiler = webpack(webpackConfig)
 
-// import App from "./app"
-var App = require("./app")
 
-console.log(App);
+app.use(proxy('/vue-waterfall-easy', {target: 'https://lfyfly.github.io/'}))
 
 //设置静态资源
 const staticPath=path.join(__dirname, "../dist")

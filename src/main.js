@@ -1,6 +1,7 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
 import _ from "lodash"
+import "asset/js/flexible"
 import App from "./app"
 import routes from "routers"
 import store from "./store"
