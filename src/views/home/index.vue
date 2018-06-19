@@ -1,6 +1,6 @@
 <template lang="html">
 <div class="home">
-  <div class="banner">
+  <div class="banner" ref="banner">
     <Swipe>
       <SwipeItem>
         <div class="banner_item">
@@ -14,7 +14,7 @@
       </SwipeItem>
     </Swipe>
   </div>
-  <div class="nav" style="width: 100%; height: 10rem;">
+  <div class="nav" style="width: 100%;" ref="nav" :style="{height: navHeight}">
     <vueWaterfallEasy :imgsArr="imgsArr" @scrollReachBottom="getData">
       <div class="img-info" slot-scope="props">
         <p class="some-info">picture index: {{props.index}}</p>
@@ -22,6 +22,7 @@
       </div>
     </vueWaterfallEasy>
   </div>
+ 
 </div>
 </template>
 
@@ -39,14 +40,25 @@ export default {
   },
   data(){
     return {
-      imgsArr: data
+      imgsArr: data,
+      navHeight: ''
     }
   },
   created(){
     console.log(data)
   },
+  mounted(){
+    this.getNavHeight()
+  },
   methods:{
-    getData(){}
+    getData(){
+
+    },
+    getNavHeight(){
+      var getWinHei = document.documentElement.clientHeight
+      var bannerHei = this.$refs.nav.clientHeight
+      this.navHeight = getWinHei-bannerHei+'px'
+    }
   }
 }
 </script>
@@ -56,7 +68,7 @@ export default {
 
 .banner {
   width:100%;
-  height: 5rem;
+  height: 3.5rem;
   .banner_item {
     width: 100%;
     height:100%;
@@ -65,5 +77,8 @@ export default {
       height: 100%;
     }
   }
+}
+.nav {
+  padding-bottom:50px;
 }
 </style>

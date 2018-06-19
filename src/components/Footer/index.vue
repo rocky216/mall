@@ -2,20 +2,14 @@
 <div class="footer">
   <div class="footer_item">
     <router-link to="/home" >
-      <i class="fa fa-newspaper-o"></i>
+      <i class="fa fa-shopping-bag"></i>
       <p>商品</p>
     </router-link>
   </div>
   <div class="footer_item">
-    <router-link to="/list" >
-      <i class="fa fa-podcast"></i>
-      <p>发现</p>
-    </router-link>
-  </div>
-  <div class="footer_item">
-    <router-link to="/list" >
-      <i class="fa fa-file-text"></i>
-      <p>发帖</p>
+    <router-link to="/cart" >
+      <i class="fa fa-shopping-cart"></i>
+      <p>购物车</p>
     </router-link>
   </div>
   <div class="footer_item">
@@ -31,6 +25,7 @@
 export default {
   data(){
     return {
+      
     }
   },
   created(){
@@ -49,7 +44,7 @@ export default {
   z-index: 10;
   width: 100%;
   border-top: 1px solid @grayColor;
-  height: 1.2rem;
+  height: 40px;
   box-sizing: border-box;
   padding-top: 0.1rem;
   .footer_item {
