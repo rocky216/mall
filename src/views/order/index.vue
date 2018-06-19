@@ -1,5 +1,6 @@
 <template>
 <div class="order">
+  <Head title="我的订单"></Head>
   <div class="address">
     <div class="address_icon">
       <i class="fa fa-map-marker"></i>
@@ -44,14 +45,16 @@
     </div>
   </div>
 
-</div>  
+</div>
 </template>
 <script >
 import {Button} from "mint-ui"
+import Head from "components/Head"
 
 export default {
   components: {
-    Button
+    Button,
+    Head
   },
   data(){
     return {
@@ -90,7 +93,7 @@ export default {
       border-bottom: 1px solid @grayf1;
       padding: 0.2rem 0;
       display: flex;
-      
+
       .price {
         flex: 1.3;
       }
