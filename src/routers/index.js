@@ -5,6 +5,8 @@ import Detail from "views/detail"
 import Cart from "views/cart"
 import Order from "views/order"
 import Users from "views/users"
+import Address from "views/address"
+import Addaddress from "views/address/add_address"
 
 export default [
   {
@@ -17,7 +19,7 @@ export default [
         component: Home
       },
       {
-        path: '/detail',
+        path: '/detail/:product_id',
         component: Detail
       },
       {
@@ -31,6 +33,14 @@ export default [
       {
         path: '/user',
         component: Users
+      },
+      {
+        path: '/address',
+        component: Address
+      },
+      {
+        path: '/add_address',
+        component: Addaddress
       },
       {
         path: '/list',

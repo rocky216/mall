@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="">
     <div class="main">
-      <router-view></router-view> 
+      <router-view></router-view>
     </div>
     <Footer v-if="isShow"></Footer>
   </div>
@@ -27,7 +27,8 @@ export default {
   },
   methods: {
     footerIsShow(){
-      this.isShow=this.$route.path=='/detail' || this.$route.path=='/cart' || this.$route.path=='/order'?false:true
+      let reg = /\/[detail]/;
+      this.isShow= reg.test(this.$route.path) || this.$route.path=='/cart' || this.$route.path=='/order'?false:true
       console.log(this.$route.path=='/detail')
     }
   }

@@ -1,19 +1,29 @@
 <template lang="html">
 <div class="head">
-  <Header fixed :title="title"></Header>
+  <Header fixed :title="title">
+    <span slot="left" @click="goBack">
+     <Button icon="back"></Button>
+   </span>
+  </Header>
 </div>
 </template>
 
 <script>
-import {Header} from "mint-ui"
+import {Header, Button} from "mint-ui"
 export default {
   components: {
-    Header
+    Header,
+    Button
   },
   props: ["title"],
   data(){
     return {
-      
+
+    }
+  },
+  methods: {
+    goBack(){
+      this.$router.go('-1')
     }
   }
 }

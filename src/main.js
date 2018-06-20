@@ -5,8 +5,10 @@ import "asset/js/flexible"
 import App from "./app"
 import routes from "routers"
 import store from "./store"
+import config from "utils/static"
 
 window._ = _;
+window.config = config;
 
 Vue.use(VueRouter)
 let router = new VueRouter({

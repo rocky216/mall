@@ -10,13 +10,13 @@ var app = express()
 var compiler = webpack(webpackConfig)
 
 
-app.use(proxy('/vue-waterfall-easy', {target: 'https://lfyfly.github.io/'}))
+app.use(proxy('/gushi/Api', {target: 'http://www.lulxc.com'}))
 
 //设置静态资源
 const staticPath=path.join(__dirname, "../dist")
 app.use(express.static(staticPath));
 
-const isDev = process.env.NODE_ENV=="development"?true:false
+const isDev = process.env.NODE_ENV=="development"?true:true
 if (isDev) {
   app.set("view engine", 'ejs');
   app.set('views', __dirname + '/');

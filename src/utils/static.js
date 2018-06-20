@@ -1,4 +1,4 @@
-const baseUrl = 'http://www.abincc.cn/gushi/'
+const baseUrl = 'http://www.lulxc.com/gushi/'
 const defaultHead = 'http://www.abincc.cn/gushi/Public/Static/img/avatar_M.jpg?time=1528942532'
 
 export default {

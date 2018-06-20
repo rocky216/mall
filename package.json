@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development nodemon --exec babel-node --harmony -w server  ./server/server.js ",
-    "start": "cross-env NODE_ENV=development node  --exec babel-node --harmony ./server/server.js "
+    "start": "cross-env NODE_ENV=development node  --exec babel-node --harmony ./server/server.js ",
+    "pro": "pm2 start ./server/server.js "
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "mint-ui": "^2.2.13",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",
+    "vue-select": "^2.4.0",
     "vue-template-compiler": "^2.5.16",
     "vue-waterfall-easy": "^2.1.9",
     "vuex": "^3.0.1",
