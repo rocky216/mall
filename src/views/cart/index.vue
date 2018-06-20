@@ -1,5 +1,6 @@
 <template>
 <div class="cart">
+  <Head title="购物车"></Head>
   <div class="cartList">
     <ul>
       <li>
@@ -46,10 +47,12 @@
 </template>
 <script>
 import {Button} from "mint-ui"
+import Head from "components/Head"
 
 export default {
   components: {
-    Button
+    Button,
+    Head
   },
   data(){
     return {
@@ -94,12 +97,13 @@ export default {
 }
 .cartList {
   padding:0 0.2rem;
+  margin-top: 40px;
   ul {
     li {
       border-bottom: 1px solid @grayf1;
       padding: 0.2rem 0;
       display: flex;
-      
+
       .price {
         flex: 1.3;
       }

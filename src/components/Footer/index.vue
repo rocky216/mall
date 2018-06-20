@@ -13,7 +13,7 @@
     </router-link>
   </div>
   <div class="footer_item">
-    <router-link to="/list" >
+    <router-link to="/user" >
       <i class="fa fa-user-circle"></i>
       <p>我的</p>
     </router-link>
@@ -25,7 +25,7 @@
 export default {
   data(){
     return {
-      
+
     }
   },
   created(){
