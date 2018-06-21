@@ -54,13 +54,22 @@ export default {
   },
   created(){
     this.getData(this.p)
+
   },
   mounted(){
     this.getNavHeight()
+    this.getScroll()
   },
   methods:{
+    getScroll(){
+      let dom = this.$el.querySelector(".vue-waterfall-easy-scroll")
+      
+      // dom.onscroll = ()=>{
+      //   console.log( dom.scrollTop );
+      // }
+
+    },
     loadData(){
-      console.log(arguments);
       if (this.bBtn) {
         this.p = this.p+1
         this.getData(this.p)
@@ -77,7 +86,6 @@ export default {
         }
       }
       fetch(options, (res)=>{
-        console.log(1);
         if (res && res.length>0) {
           this.bBtn=true
           this.imgsArr = this.imgsArr.concat(this.formatData(res))

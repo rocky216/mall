@@ -3,28 +3,16 @@
   <Head title="收货地址"></Head>
   <div class="addressList">
     <ul>
-      <li>
-        <div class="userInfo">
-          收货人：花生    188888888
+      <li :class="{active: parseInt(item.is_default)}" v-for="(item, index) in addressList" :key="item.address_id" >
+        <div class="info" @click="setDefult(item)">
+          <div class="userInfo">
+            收货人：{{item.name}}    {{item.mobile}}
+          </div>
+          <div class="adressInfo">{{item.province_title+item.city_title+item.area_title+item.address_detail}}</div>
         </div>
-        <div class="adressInfo">
-          江西省吉安市吉州区凯旋汽车城
-        </div>
-      </li>
-      <li>
-        <div class="userInfo">
-          收货人：花生    188888888
-        </div>
-        <div class="adressInfo">
-          江西省吉安市吉州区凯旋汽车城
-        </div>
-      </li>
-      <li>
-        <div class="userInfo">
-          收货人：花生    188888888
-        </div>
-        <div class="adressInfo">
-          江西省吉安市吉州区凯旋汽车城
+        <div class="options">
+          <i class="fa fa-pencil fa-fw"></i>
+          <i class="fa fa-trash-o fa-lg" @click="deleteAddress(item)"></i>
         </div>
       </li>
     </ul>
@@ -39,6 +27,8 @@
 
 <script>
 import Head from "components/Head"
+import {fetch} from "utils"
+import {Toast} from "mint-ui"
 
 export default {
   components: {
@@ -46,7 +36,53 @@ export default {
   },
   data(){
     return {
-
+      addressList: []
+    }
+  },
+  created(){
+    this.getAddress()
+  },
+  methods: {
+    deleteAddress(item){
+      const options={
+        url: "/gushi/Api/User/Address/del",
+        method: "post",
+        data: {
+          token: this.$cookie.get("token"),
+          address_id: item.address_id
+        }
+      }
+      fetch(options, ()=>{
+        Toast("删除成功！")
+        this.getAddress()
+      })
+    },
+    setDefult(item){
+      if (parseInt(item.address_id)) return;
+      
+      const options={
+        url: "/gushi/Api/User/Address/set_default",
+        method: "post",
+        data: {
+          token: this.$cookie.get("token"),
+          address_id: item.address_id
+        }
+      }
+      fetch(options, (res)=>{
+        this.getAddress()
+      })
+    },
+    getAddress(){
+      const options = {
+        url: "/gushi/Api/User/Address/index",
+        method: "post",
+        data: {
+          token: this.$cookie.get("token")
+        }
+      }
+      fetch(options, (res)=>{
+        this.addressList = res
+      })
     }
   }
 }
@@ -57,11 +93,27 @@ export default {
 .addressList {
   margin-top: 40px;
   ul {
+    li.active {
+      background-color: @grayddd;
+    }
     li {
       padding: 0.2rem;
       box-sizing: border-box;
       line-height: 0.6rem;
       border-bottom: 1px solid @grayf1;
+      display: flex;
+      .info {
+        flex: 7;
+      }
+      .options {
+        flex: 2;
+        display: flex;
+        padding-top: 0.4rem;
+        i{
+          flex: 1;
+          text-align: center;
+        }
+      }
       .userInfo {
         width: 90%;
       }

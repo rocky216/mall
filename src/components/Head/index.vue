@@ -4,6 +4,7 @@
     <span slot="left" @click="goBack">
      <Button icon="back"></Button>
    </span>
+   <Button v-if="right" slot="right" @click="rightHandle">{{right}}</Button>
   </Header>
 </div>
 </template>
@@ -15,7 +16,7 @@ export default {
     Header,
     Button
   },
-  props: ["title"],
+  props: ["title","right"],
   data(){
     return {
 
@@ -24,6 +25,9 @@ export default {
   methods: {
     goBack(){
       this.$router.go('-1')
+    },
+    rightHandle(){
+      this.$emit("rightHandle")
     }
   }
 }

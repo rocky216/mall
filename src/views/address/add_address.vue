@@ -1,5 +1,6 @@
 <template lang="html">
 <div class="add_address">
+  <Head title="添加收货地址" right="保存" @rightHandle="rightHandle"></Head>
   <div class="area">
     <div class="area_item">
       <select v-model="province" @change="provinceHandle">
@@ -25,7 +26,19 @@
       <tr>
         <td>详细地址</td>
         <td>
-          <textarea rows="3"></textarea>
+          <textarea v-model="detailAdrs" rows="3" placeholder="详细地址" ></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>收件人</td>
+        <td>
+          <input v-model="name" type="text" placeholder="收件人" >
+        </td>
+      </tr>
+      <tr>
+        <td>手机号</td>
+        <td>
+          <input v-model="mobile" type="text" placeholder="手机号码">
         </td>
       </tr>
     </table>
@@ -35,10 +48,14 @@
 
 <script>
 import citys from "./citys"
+import Head from "components/Head"
+import {Button, Toast} from "mint-ui"
+import {fetch} from "utils"
 
 export default {
   components: {
-
+    Head,
+    Button
   },
   data(){
     return {
@@ -48,13 +65,57 @@ export default {
       city: '',
       area:'',
       citys: [],
-      areas: []
+      areas: [],
+      detailAdrs: '',
+      mobile: '',
+      name: ''
     }
   },
   created(){
 
   },
   methods: {
+    addAddress(){
+      const {province, city, area, name, detailAdrs, mobile} = this
+
+      const options = {
+        url: "/gushi/Api/User/Address/add",
+        method: "post",
+        data: {
+          is_default: '',
+          province: province,
+          city:city,
+          area:area,
+          address_detail: detailAdrs,
+          name: name,
+          mobile: mobile,
+          token: this.$cookie.get("token")
+        }
+      }
+      fetch(options, (res)=>{
+        this.$router.push("/address")
+      })
+    },
+    rightHandle(){
+      const {province, city, area, name, detailAdrs, mobile} = this
+      if (!province || !city || !area) {
+        Toast("请选择完整地区！")
+        return
+      }
+      if (!detailAdrs) {
+        Toast("请填写详细地址！")
+        return
+      }
+      if (!name) {
+        Toast("请填写姓名！")
+        return
+      }
+      if (!mobile || !(/^1[34578]\d{9}$/.test(mobile)) ) {
+        Toast("请输入正确的手机号码！")
+        return
+      }
+      this.addAddress()
+    },
     provinceHandle(value){
       let city = _.filter(this.allCity,n=>n.code==value.target.value)[0]
       this.citys = city?city.sub:[]
@@ -75,6 +136,7 @@ export default {
 @import "../../asset/less/common.less";
 
 .area {
+  margin-top: 50px;
   display: flex;
   .area_item {
     flex: 1;
@@ -84,8 +146,8 @@ export default {
     select {
       width: 100%;
       height: 1rem;
-      border: 1px solid @gray999;
-      border-radius: 0.1rem;
+      border:none;
+      border-bottom: 1px solid @grayddd;
     }
   }
 }
@@ -95,12 +157,16 @@ export default {
     tr {
       td {
         padding: 0.2rem;
-        textarea{
+        textarea, input{
           width: 100%;
+          padding: 0.2rem;
+          border:1px solid @grayddd;
+          box-sizing: border-box;
         }
       }
       td:nth-child(1){
         text-align: right;
+        width: 2rem;
       }
     }
   }

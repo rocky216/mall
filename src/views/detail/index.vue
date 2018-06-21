@@ -97,7 +97,7 @@ export default {
 
 .banner {
   width:100%;
-  height: 6.5rem;
+  height: 7rem;
   .banner_item {
     width: 100%;
     height:100%;

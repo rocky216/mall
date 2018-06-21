@@ -15,8 +15,11 @@ export default [
     redirect: "/home",
     children: [
       {
-        path: '/home',
-        component: Home
+        path: '/home/:scroll?',
+        component: Home,
+        meta: {
+          keepAlive: true
+        }
       },
       {
         path: '/detail/:product_id',

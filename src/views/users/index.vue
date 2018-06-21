@@ -1,9 +1,9 @@
 <template lang="html">
 <div class="users">
   <div class="header">
-    <div class="loginout">
+    <!-- <div class="loginout">
       <i class="fa fa-power-off"></i>
-    </div>
+    </div> -->
     <div class="header_box">
       <img src="https://s.yimg.com/qs/mall/yps/obdesign_5.jpg" alt="">
       <p>花生</p>
@@ -23,18 +23,21 @@
         <i class="fa fa-gbp"></i>
         <p>已完成</p>
       </li>
+      <li>
+        <router-link to="/address">
+          <i class="fa fa-map-marker"></i>
+          <p>收货地址</p>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/address">
+          <i class="fa fa-power-off"></i>
+          <p>安全退出</p>
+        </router-link>
+      </li>
     </ul>
   </div>
-  <div class="cellList">
-    <div class="cell_item">
-      <router-link to="/address">
-        <Cell title="收货地址">
-          <span class="fa fa-map-marker redColor spanIcon" slot="icon"></span>
-          <i class="fa fa-angle-right"></i>
-        </Cell>
-      </router-link>
-    </div>
-  </div>
+
 </div>
 </template>
 
@@ -88,10 +91,11 @@ export default {
   ul {
     width: 100%;
     display: flex;
+    flex-wrap:wrap;
     li{
-      flex: 1;
+      width: 33.3%;
       box-sizing: border-box;
-      padding: 0.2rem;
+      padding: 0.6rem 0.2rem;
       border-right: 1px solid @grayf1;
       border-bottom: 1px solid @grayf1;
       color: @gray666;
