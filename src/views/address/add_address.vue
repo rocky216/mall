@@ -93,7 +93,7 @@ export default {
         }
       }
       fetch(options, (res)=>{
-        this.$router.push("/address")
+        this.$router.go("-1")
       })
     },
     rightHandle(){

@@ -32,7 +32,9 @@ export default {
   methods: {
     footerIsShow(){
       let reg = /\/[detail]/;
-      this.isShow= reg.test(this.$route.path) || this.$route.path=='/cart' || this.$route.path=='/order'?false:true
+      let reg1 = /\/[order]/;
+      let reg2 = /\/[cart_order]/;
+      this.isShow= reg2.test(this.$route.path) || reg.test(this.$route.path) || this.$route.path=='/cart' || reg1.test(this.$route.path)?false:true
       console.log(this.$route.path=='/detail')
     }
   }

@@ -4,6 +4,7 @@
   <div class="addressList">
     <ul>
       <li :class="{active: parseInt(item.is_default)}" v-for="(item, index) in addressList" :key="item.address_id" >
+        <span class="fa fa-check-square-o"></span>
         <div class="info" @click="setDefult(item)">
           <div class="userInfo">
             收货人：{{item.name}}    {{item.mobile}}
@@ -28,7 +29,7 @@
 <script>
 import Head from "components/Head"
 import {fetch} from "utils"
-import {Toast} from "mint-ui"
+import {Toast, MessageBox} from "mint-ui"
 
 export default {
   components: {
@@ -52,14 +53,20 @@ export default {
           address_id: item.address_id
         }
       }
-      fetch(options, ()=>{
-        Toast("删除成功！")
-        this.getAddress()
-      })
+      MessageBox({
+        message: '是否删除？',
+        showCancelButton: true
+      }).then(action => {
+        if (action=="confirm") {
+          fetch(options, ()=>{
+            Toast("删除成功！")
+            this.getAddress()
+          })
+        }
+      });
     },
     setDefult(item){
-      if (parseInt(item.address_id)) return;
-      
+      if (parseInt(item.is_default)) return;
       const options={
         url: "/gushi/Api/User/Address/set_default",
         method: "post",
@@ -70,6 +77,9 @@ export default {
       }
       fetch(options, (res)=>{
         this.getAddress()
+        if (this.$route.params.type=="1") {
+          this.$router.go('-1')
+        }
       })
     },
     getAddress(){
@@ -94,10 +104,20 @@ export default {
   margin-top: 40px;
   ul {
     li.active {
-      background-color: @grayddd;
+      color: @greenColor;
+      span {
+        display: block;
+      }
     }
     li {
-      padding: 0.2rem;
+      position: relative;
+      span {
+        display: none;
+        position: absolute;
+        top: 0.6rem;
+        left: 0.2rem;
+      }
+      padding: 0.2rem 0.2rem 0.2rem 0.8rem;
       box-sizing: border-box;
       line-height: 0.6rem;
       border-bottom: 1px solid @grayf1;

@@ -3,27 +3,30 @@
   <Head title="购物车"></Head>
   <div class="cartList">
     <ul>
-      <li>
+      <li v-for="item in cartList" :key="item.product_id">
         <div class="checkBox">
-          <input type="checkBox">
+          <input type="checkBox" :checked="item.checked" @change="checkedHandle(item)">
           <span><i class="fa fa-check"></i></span>
         </div>
         <div class="info">
           <div class="img">
-            <img src="https://s.yimg.com/qs/mall/yps/obdesign_5.jpg" />
+            <img :src="baseUrl+item.product_image" />
           </div>
           <div class="infoText">
             <h2>金龙鱼 盘锦大米 蟹稻共生5kg 东北大米 人气爆款</h2>
             <div class="num">
-              <span>-</span>
-              <span>1</span>
-              <span>+</span>
+              <span @click="reduce(item)">-</span>
+              <span>{{parseInt(item.product_num)}}</span>
+              <span @click="add(item)">+</span>
+            </div>
+            <div class="isPrice">
+              {{toDecimal(item.product_price*item.product_num)}}
             </div>
           </div>
         </div>
         <div class="price">
           <p>数量x1</p>
-          <p>￥29.9</p>
+          <p>￥{{toDecimal(item.product_price)}}</p>
           <i class="fa fa-trash-o fa-lg"></i>
         </div>
       </li>
@@ -31,23 +34,22 @@
   </div>
   <div class="bottom">
     <div class="checkBox">
-      <input type="checkbox">
+      <input type="checkbox" :checked="isAllChecked" @change="allChecked">
       <span><i class="fa fa-check"></i></span>
     </div>
     <div class="text">
-      <p>总价： ￥79.6</p>
+      <p>总价： ￥{{totalMoney}}</p>
     </div>
     <div class="settle">
-      <router-link to="/order">
-        <Button type="danger" size="small">结算(1)</Button>
-      </router-link>
+      <Button @click="settle" type="danger" size="small">结算({{totalNum}})</Button>
     </div>
   </div>
 </div>
 </template>
 <script>
-import {Button} from "mint-ui"
+import {Button, Toast} from "mint-ui"
 import Head from "components/Head"
+import {fetch} from "utils"
 
 export default {
   components: {
@@ -56,13 +58,131 @@ export default {
   },
   data(){
     return {
-      options: [{
-        value: 1,
-      },{
-        value: 2,
-      },{
-        value: 3,
-      }]
+      cartList: [],
+      baseUrl: config.baseUrl,
+      checkedOrder: [],
+      isAllChecked: false
+    }
+  },
+  created(){
+    this.getCartList()
+  },
+  computed: {
+    totalMoney(){
+      let str = 0
+      _.each(this.cartList, (item)=>{
+        if (item.checked) {
+          str += item.product_price*item.product_num
+        }
+      })
+      return this.toDecimal(str)
+    },
+    totalNum(){
+      let str = 0
+      _.each(this.cartList, (item)=>{
+        if (item.checked) {
+          str += parseInt(item.product_num)
+        }
+      })
+      return str
+    }
+  },
+  methods: {
+    settle(){
+      if (this.totalNum==0) {
+        Toast("请添加商品！")
+        return
+      };
+      let product_ids = this.getStr(this.cartList, "product_id")
+      let product_nums = this.getStr(this.cartList, "product_num")
+      localStorage.setItem('cartorder', JSON.stringify(_.filter(this.cartList,o=>o.checked)));
+      this.$router.push({name: "cart_order", query: {oriderId: product_ids,nums: product_nums}})
+    },
+    getStr(arr,attr){
+      var newArr=[]
+      _.each(arr, (item)=>{
+        newArr.push(item[attr])
+      })
+      return newArr.join()
+    },
+    allChecked(){
+      this.isAllChecked = event.target.checked;
+      this.cartList = _.map(this.cartList, (o)=>{
+        o.checked = this.isAllChecked?true:false
+        return o
+      })
+    },
+    checkedHandle(item){
+      let index = _.findIndex(this.cartList, o=>o.product_id == item.product_id)
+      this.cartList = this.getCheckedArr(this.cartList, index)
+      let isAllChecked = _.filter(this.cartList, o=>!o.checked)
+      this.isAllChecked = !_.filter(this.cartList, o=>!o.checked).length?true:false;
+    },
+    getCheckedArr(arr, index){
+      let newArr=[]
+      _.each(arr, (item,i)=>{
+        if (i==index) {
+          item["checked"] = !item["checked"]
+        }
+        newArr.push(item)
+      })
+      return newArr
+    },
+    toDecimal(x) {
+      var val = Number(x)
+      if(!isNaN(parseFloat(val))) {
+         val = val.toFixed(2);
+      }
+      return  val;
+    },
+    createArr(arr, index, type=true){
+      var newArr=[]
+      _.each(arr, (item,i)=>{
+        if (index==i ) {
+          if (!type && item["product_num"] >1) {
+            item["product_num"] = parseInt(item["product_num"])-1
+          }
+          if (type) {
+            item["product_num"] = parseInt(item["product_num"])+1
+          }
+        }
+        newArr.push(item)
+      })
+      return newArr
+    },
+    add(item){
+      let index = _.findIndex(this.cartList, o=>o.product_id == item.product_id)
+      this.cartList = this.createArr(this.cartList, index)
+    },
+    reduce(item){
+      let index = _.findIndex(this.cartList, o=>o.product_id == item.product_id)
+      this.cartList = this.createArr(this.cartList, index, false)
+    },
+    // changeCartNum(item, type=true){
+    //   const options={
+    //     url: "/gushi/Api/User/Cart/set_num",
+    //     method: "post",
+    //     data: {
+    //       token: this.$cookie.get("token"),
+    //       cart_id: item.cart_id,
+    //       product_num: type?parseInt(item.product_num)+1:parseInt(item.product_num)-1
+    //     }
+    //   }
+    //   fetch(options, ()=>{
+    //
+    //   })
+    // },
+    getCartList(){
+      const options = {
+        url: "/gushi/Api/User/Cart/index",
+        method: "post",
+        data: {
+          token: this.$cookie.get("token")
+        }
+      }
+      fetch(options, (res)=>{
+        this.cartList=res
+      })
     }
   }
 }
@@ -106,6 +226,10 @@ export default {
 
       .price {
         flex: 1.3;
+        text-align: right;
+        i{
+          margin-top: 0.3rem;
+        }
       }
       .info {
         flex: 5;
@@ -150,7 +274,9 @@ export default {
     }
   }
   .settle {
-    flex: 2;
+    flex: 3;
+    text-align: right;
+    margin-right: 0.2rem;
     button{
       margin-top: 0.3rem;
     }
@@ -159,6 +285,7 @@ export default {
 .num {
   width: 2.7rem;
   margin-top: 0.2rem;
+  float: left;
   span {
     float: left;
     box-sizing: border-box;
@@ -170,6 +297,12 @@ export default {
     margin-left: 0.1rem;
     background-color: @grayf1;
   }
+}
+.isPrice {
+  float: left;
+  line-height: 1rem;
+  margin-left: 0.1rem;
+  color: @redColor;
 }
 
 </style>

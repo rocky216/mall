@@ -1,6 +1,6 @@
 <template lang="html">
 <div class="home">
-  <div class="banner" ref="banner">
+  <!-- <div class="banner" ref="banner">
     <Swipe>
       <SwipeItem>
         <div class="banner_item">
@@ -13,7 +13,7 @@
         </div>
       </SwipeItem>
     </Swipe>
-  </div>
+  </div> -->
   <div class="nav" style="width: 100%;" ref="nav" :style="{height: navHeight}">
     <vueWaterfallEasy :imgsArr="imgsArr" @scrollReachBottom="loadData" srcKey="image" >
       <div class="img-info" slot-scope="props">
@@ -63,7 +63,7 @@ export default {
   methods:{
     getScroll(){
       let dom = this.$el.querySelector(".vue-waterfall-easy-scroll")
-      
+
       // dom.onscroll = ()=>{
       //   console.log( dom.scrollTop );
       // }

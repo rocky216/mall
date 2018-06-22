@@ -16,6 +16,13 @@
     <h2>{{detailInfo.title}}</h2>
     <span>{{detailInfo.price}}元</span>
   </div>
+  <div class="getNum">
+    <div class="num">
+      <span @click="reduce()">-</span>
+      <span>{{num}}</span>
+      <span @click="add()">+</span>
+    </div>
+  </div>
   <div class="description">{{detailInfo.description}}</div>
   <div class="detail_title_box">
     <div class="detail_title">
@@ -31,16 +38,16 @@
       <p>收藏</p>
     </div>
     <div class="cart">
-      <a>加入购物车</a>
+      <a @click="addCart">加入购物车</a>
     </div>
     <div class="buy">
-      <a>立即购买</a>
+      <a @click="buy">立即购买</a>
     </div>
   </div>
 </div>
 </template>
 <script>
-import {Swipe, SwipeItem} from "mint-ui"
+import {Swipe, SwipeItem, Toast} from "mint-ui"
 import {fetch} from "utils"
 
 export default {
@@ -52,13 +59,39 @@ export default {
     return {
       imgs: [],
       detailInfo: '',
-      baseUrl: config.baseUrl
+      baseUrl: config.baseUrl,
+      num: 1
     }
   },
   created(){
     this.getDetail()
   },
   methods: {
+    reduce(){
+      if (this.num>1) {
+        this.num = this.num-1
+      }
+    },
+    add(){
+      this.num = this.num+1
+    },
+    buy(){
+      this.$router.push(`/order/${this.$route.params.product_id}/${this.num}`)
+    },
+    addCart(){
+      const options = {
+        url: "/gushi/Api/User/Cart/add",
+        method: "post",
+        data: {
+          token: this.$cookie.get("token"),
+          sku_id: this.detailInfo.sku[0]["sku_id"],
+          num: 1
+        }
+      }
+      fetch(options, (res)=>{
+        Toast("加入购物车成功！")
+      })
+    },
     replaceConent(str){
       console.log(str);
       return str?str.replace(/\/Uploads\/UserFile\/Image/g, this.baseUrl+'Uploads/UserFile/Image'):null
@@ -87,6 +120,7 @@ export default {
   width: 100%;
   box-sizing: border-box;
   word-break:break-all;
+  padding: 0.2rem;
   img {
     width: 100%;
   }
@@ -108,7 +142,7 @@ export default {
   }
 }
 .title {
-  padding: 0.2rem;
+  padding: 0.2rem 0.2rem 0 0.2rem;
   display: flex;
   h2 {
     flex: 10;
@@ -197,6 +231,26 @@ export default {
   i {
     color:@whiteColor;
     font-size: 18px;
+  }
+}
+.getNum {
+  overflow: hidden;
+  margin: 0 0 0.2rem 0.2rem;
+}
+.num {
+  width: 2.7rem;
+  margin-top: 0.2rem;
+  float: left;
+  span {
+    float: left;
+    box-sizing: border-box;
+    border: 1px solid @grayf1;
+    height: 0.8rem;
+    width: 0.8rem;
+    text-align: center;
+    line-height: 0.7rem;
+    margin-left: 0.1rem;
+    background-color: @grayf1;
   }
 }
 </style>

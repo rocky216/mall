@@ -21,16 +21,16 @@
 
   <div class="cartList">
     <ul>
-      <li>
+      <li v-for="item in orderList" :key="item.product_id">
         <div class="info">
           <div class="img">
-            <img :src="baseUrl+detailInfo.cover" />
+            <img :src="baseUrl+item.product_image" />
           </div>
           <div class="infoText">
-            <h2>{{detailInfo.title}}</h2>
+            <h2>{{item.product_title}}</h2>
             <div class="price">
-              <p class="colorRed">￥{{detailInfo.price}}</p>
-              <p>数量x1</p>
+              <p class="colorRed">￥{{item.product_price}}</p>
+              <p>数量x{{item.product_num}}</p>
             </div>
           </div>
         </div>
@@ -41,9 +41,7 @@
         <div class="freight">
           <span>&nbsp;</span>
           <span>共计一件商品 &nbsp;&nbsp;&nbsp; 小计￥
-            <strong>
-              {{detailInfo.price?oDecimal(parseInt($route.params.num)*parseInt(detailInfo.price)):''}}
-            </strong>
+            <strong>{{oDecimal(parseInt(item.product_num)*parseInt(item.product_price))}}</strong>
           </span>
         </div>
       </li>
@@ -52,11 +50,13 @@
 
   <div class="bottom">
     <div class="text">
-      <p>共{{$route.params.num}}件</p>
-      <p>总金额： ￥{{detailInfo.price?oDecimal(parseInt($route.params.num)*parseInt(detailInfo.price)):''}}</p>
+      <p>共{{nums}}件</p>
+      <p>总金额： ￥{{total}}</p>
     </div>
     <div class="settle">
-      <Button type="danger" size="small">提交订单</Button>
+      <router-link to="/order">
+        <Button type="danger" size="small">提交订单</Button>
+      </router-link>
     </div>
   </div>
 
@@ -65,7 +65,7 @@
 <script >
 import {Button} from "mint-ui"
 import Head from "components/Head"
-import {fetch, oDecimal} from "utils"
+import {fetch,oDecimal} from "utils"
 
 export default {
   components: {
@@ -75,16 +75,17 @@ export default {
   data(){
     return {
       address: [],
-      detailInfo: '',
-      baseUrl: config.baseUrl
+      orderList: JSON.parse(localStorage.getItem("cartorder")),
+      baseUrl: config.baseUrl,
+      total: '0.00',
+      nums: '0'
     }
   },
   created(){
-    this.getDetail()
     this.getAddress()
   },
   methods: {
-    oDecimal: oDecimal,
+    oDecimal:oDecimal,
     getAddress(){
       const options = {
         url: "/gushi/Api/User/Address/index",
@@ -95,18 +96,6 @@ export default {
       }
       fetch(options, (res)=>{
         this.address = _.filter(res, o=>o.is_default=="1")[0]
-      })
-    },
-    getDetail(){
-      const options = {
-        url: "/gushi/Api/Common/Product/info",
-        method: "post",
-        data: {
-          product_id: this.$route.params.product_id
-        }
-      }
-      fetch(options, (res)=>{
-        this.detailInfo = res
       })
     },
   }
@@ -120,8 +109,8 @@ export default {
   color: @redColor;
 }
 .address {
-  margin-top: 40px;
   padding: 0.2rem 0;
+  margin-top: 40px;
   display: flex;
   .address_icon {
     flex: 1;
@@ -137,15 +126,14 @@ export default {
 
 .cartList {
   border-top: 1px solid @grayf1;
+  padding:0 0.2rem;
   ul {
     li {
       border-bottom: 1px solid @grayf1;
       padding: 0.2rem 0.2rem 0 0.2rem;
       .info {
-        width: 100%;
         flex: 5;
         display: flex;
-        padding-bottom: 0.2rem;
         .img {
           width: 2rem;
           height: 2rem;
@@ -195,6 +183,7 @@ export default {
 }
 
 .bottom {
+  background-color: @whiteColor;
   height: 50px;
   display: flex;
   position: fixed;

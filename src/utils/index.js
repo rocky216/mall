@@ -46,3 +46,11 @@ export function fetch(opt, cb){
     console.log('%c','color:red', err);
   })
 }
+
+export function oDecimal(x) {
+  var val = Number(x)
+  if(!isNaN(parseFloat(val))) {
+     val = val.toFixed(2);
+  }
+  return  val;
+}
