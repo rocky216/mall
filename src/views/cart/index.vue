@@ -27,7 +27,7 @@
         <div class="price">
           <p>数量x1</p>
           <p>￥{{toDecimal(item.product_price)}}</p>
-          <i class="fa fa-trash-o fa-lg"></i>
+          <i class="fa fa-trash-o fa-lg" @click="cartDel(item)"></i>
         </div>
       </li>
     </ul>
@@ -47,7 +47,7 @@
 </div>
 </template>
 <script>
-import {Button, Toast} from "mint-ui"
+import {Button, Toast, MessageBox} from "mint-ui"
 import Head from "components/Head"
 import {fetch} from "utils"
 
@@ -88,6 +88,29 @@ export default {
     }
   },
   methods: {
+    cartDel(item){
+      const options = {
+        url: "/gushi/Api/User/Cart/del",
+        method: "post",
+        data: {
+          token: this.$cookie.get("token"),
+          cart_ids: item.cart_id
+        }
+      }
+
+      MessageBox({
+        message: '是否删除？',
+        showCancelButton: true
+      }).then(action => {
+        if (action=="confirm") {
+          fetch(options, ()=>{
+            Toast("删除成功！")
+            this.getCartList()
+            this.isAllChecked = false
+          })
+        }
+      });
+    },
     settle(){
       if (this.totalNum==0) {
         Toast("请添加商品！")

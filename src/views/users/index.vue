@@ -12,9 +12,11 @@
   <div class="orderList">
     <ul>
       <li>
-        <i class="fa fa-server"></i>
-        <p>全部订单</p>
-        </li>
+        <router-link to="/order_list">
+          <i class="fa fa-server"></i>
+          <p>全部订单</p>
+        </router-link>
+      </li>
       <li>
         <i class="fa fa-truck"></i>
         <p>待收货</p>
@@ -24,16 +26,20 @@
         <p>已完成</p>
       </li>
       <li>
+        <router-link to="/cart">
+          <i class="fa fa-shopping-cart"></i>
+          <p>购物车</p>
+        </router-link>
+      </li>
+      <li>
         <router-link to="/address">
           <i class="fa fa-map-marker"></i>
           <p>收货地址</p>
         </router-link>
       </li>
-      <li>
-        <router-link to="/address">
-          <i class="fa fa-power-off"></i>
-          <p>安全退出</p>
-        </router-link>
+      <li @click="loginout">
+        <i class="fa fa-power-off"></i>
+        <p>安全退出</p>
       </li>
     </ul>
   </div>
@@ -42,13 +48,27 @@
 </template>
 
 <script>
-import {Cell } from "mint-ui"
+import {Cell, MessageBox, Toast} from "mint-ui"
 export default {
   components: {
     Cell
   },
   data(){
     return {
+
+    }
+  },
+  methods: {
+    loginout(){
+      MessageBox({
+        message: '是否退出登录？',
+        showCancelButton: true
+      }).then(action => {
+        if (action=="confirm") {
+          Toast("退出登录成功！")
+          this.$cookie.delete('token');
+        }
+      });
 
     }
   }

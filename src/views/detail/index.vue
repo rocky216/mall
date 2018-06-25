@@ -93,7 +93,6 @@ export default {
       })
     },
     replaceConent(str){
-      console.log(str);
       return str?str.replace(/\/Uploads\/UserFile\/Image/g, this.baseUrl+'Uploads/UserFile/Image'):null
     },
     getDetail(){

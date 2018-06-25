@@ -54,9 +54,7 @@
       <p>总金额： ￥{{total}}</p>
     </div>
     <div class="settle">
-      <router-link to="/order">
-        <Button type="danger" size="small">提交订单</Button>
-      </router-link>
+      <Button type="danger" size="small">提交订单</Button>
     </div>
   </div>
 
@@ -76,13 +74,28 @@ export default {
     return {
       address: [],
       orderList: JSON.parse(localStorage.getItem("cartorder")),
-      baseUrl: config.baseUrl,
-      total: '0.00',
-      nums: '0'
+      baseUrl: config.baseUrl
     }
   },
   created(){
     this.getAddress()
+    console.log(this.orderList);
+  },
+  computed: {
+    nums(){
+      let str =0
+      _.each(this.orderList, (item)=>{
+        str+=parseInt(item.product_num)
+      })
+      return str
+    },
+    total(){
+      let str =0
+      _.each(this.orderList, (item)=>{
+        str+=parseInt(item.product_num)*parseInt(item.product_price)
+      })
+      return str
+    }
   },
   methods: {
     oDecimal:oDecimal,
@@ -184,7 +197,7 @@ export default {
 
 .bottom {
   background-color: @whiteColor;
-  height: 50px;
+  height: 1.2rem;
   display: flex;
   position: fixed;
   width: 100%;
@@ -199,17 +212,17 @@ export default {
     padding-left: 0.2rem;
     box-sizing: border-box;
     p:nth-child(1) {
-      margin-top:0.2rem;
+      margin-top:0.1rem;
     }
     p {
-      font-size: @size14;
+      font-size: @size12;
       margin-left:0.5rem;
     }
   }
   .settle {
     flex: 2;
     button{
-      margin-top: 0.3rem;
+      margin-top: 0.1rem;
     }
   }
 }

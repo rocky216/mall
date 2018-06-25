@@ -8,6 +8,7 @@ import Cartorder from "views/order/cart_order"
 import Users from "views/users"
 import Address from "views/address"
 import Addaddress from "views/address/add_address"
+import OrderList from "views/order/order_list"
 
 export default [
   {
@@ -33,6 +34,10 @@ export default [
       {
         path: '/order/:product_id?/:num?',
         component: Order
+      },
+      {
+        path: '/order_list',
+        component: OrderList
       },
       {
         path: '/cart_order',
